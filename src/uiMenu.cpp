@@ -1,0 +1,134 @@
+#include "graphicsForUI/uiMenu.h"
+
+void gui::UIMenu::toggle(bool arg)
+{
+    isVisible = arg;
+}
+
+void gui::UIMenu::outlineMouseEvent()
+{
+    if(isMenuSelected)
+    {
+        setPosition(outlineBox.getPosition() + outlineMouseHandle.getMousePos() - previousMousePos);
+    }
+
+    if(outlineMouseHandle.isClicked().first || outlineMouseHandle.isPressed().first && isMenuSelected)
+    {
+        previousMousePos = outlineMouseHandle.getMousePos();
+        isMenuSelected = true;
+    }
+    else 
+    {
+        isMenuSelected = false;
+    }
+}
+
+void gui::UIMenu::inputEvent()
+{
+    for(UIElement* uiElement : elements)
+    {
+        if(uiElement->getType() == gui::BUTTON || uiElement->getType() == gui::SLIDER)
+        {
+            uiElement->update();
+        }
+    }
+}
+
+void gui::UIMenu::setPadding(sf::Vector2f padding)
+{
+    this->padding = padding;
+}
+
+void gui::UIMenu::recomputeSize()
+{
+    sf::Vector2f minimumSize = size;
+    sf::Vector2f currentElementPosition = this->padding;
+    for(UIElement* elem : elements)
+    {
+        if(elem->getPadding().x != 0)
+        {
+            currentElementPosition += sf::Vector2f(elem->getPadding().x + elem->getSize().x, 0);
+        }
+        else
+        {
+            currentElementPosition.x = std::max(currentElementPosition.x, elem->getSize().x); //<-- NOT CORRECT DUE TO THE NEED TO CHECK IF THIS IS THE LAST ELEMENT
+            minimumSize.x = std::max(minimumSize.x, elem->getSize().x);
+        }
+        if(elem->getPadding().y != 0)
+        {
+            currentElementPosition += sf::Vector2f(0, elem->getPadding().y + elem->getSize().y);
+        }
+        else
+        {
+            currentElementPosition.x = std::max(currentElementPosition.x, elem->getSize().x);
+            minimumSize.y = std::max(minimumSize.y, elem->getSize().y);
+        }
+        minimumSize = { std::max(minimumSize.x, currentElementPosition.x + 2*this->padding.x), std::max(minimumSize.y, currentElementPosition.y + 2*this->padding.y) };
+    }
+    
+    this->setMenuBoxSize(minimumSize);
+}
+
+void gui::UIMenu::resetComponents()
+{
+//--- Relative positioning
+
+    sf::Vector2f previousPosition = box.getPosition() + this->padding; // setting up the variable for the first element
+
+    if(elements.at(0)->getPadding().x != 0)
+    {
+        previousPosition -= sf::Vector2f(elements.at(0)->getSize().x, 0);
+    }
+    if(elements.at(0)->getPadding().y != 0)
+    {
+        previousPosition -= sf::Vector2f(0, elements.at(0)->getSize().y);
+    }
+
+    for(UIElement* element : elements)
+    {
+        if(element->getPadding().y != 0)
+        {
+            previousPosition += sf::Vector2f(0, element->getSize().y + element->getPadding().y); // moving it lower than the previous element
+        }
+
+        if(element->getPadding().x != 0)
+        {
+            previousPosition += sf::Vector2f(element->getPadding().x + element->getSize().x, 0);
+        }
+
+        element->setPosition(previousPosition);
+    } 
+}
+
+void gui::UIMenu::addElement(UIElement* element)
+{
+    elements.push_back(element);
+    setPosition(box.getPosition()); //as the box represents the main frame, it can be used for getting the position...
+    
+    this->recomputeSize();
+}
+
+void gui::UIMenu::removeElement(int index)
+{
+    assert(index >= 0 && index < elements.size());
+    elements.erase(elements.begin() + index);
+
+    this->recomputeSize();
+}
+
+gui::UIMenu::UIMenu(sf::Vector2f size, sf::Vector2f position, sf::Color boxColor, sf::Color outlineColor, float outlineThickness, sf::RenderWindow* window)
+:
+startFOV(window->getView().getSize()),
+size(size),
+position(position),
+outlineThickness(outlineThickness),
+outlineMouseHandle(window, &outlineBox)
+{
+    box.setSize(size);
+    box.setPosition(sf::Vector2f(position.x, position.y + outlineThickness) );
+    box.setFillColor(boxColor);
+
+    outlineBox.setPosition(position);
+    outlineBox.setFillColor(outlineColor);
+    outlineBox.setSize(sf::Vector2f(size.x, outlineThickness));
+}

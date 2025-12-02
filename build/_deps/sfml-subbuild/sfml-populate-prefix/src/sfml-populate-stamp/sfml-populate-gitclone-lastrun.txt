@@ -3,7 +3,7 @@
 # No other meaning or use of this file is supported.
 
 method=git
-command=D:/Prgrams/CMake/bin/cmake.exe;-P;D:/VcProj/ownUILib/build/_deps/sfml-subbuild/sfml-populate-prefix/tmp/sfml-populate-gitclone.cmake
+command=D:/Prgrams/CMake/bin/cmake.exe;-DCMAKE_MESSAGE_LOG_LEVEL=VERBOSE;-P;D:/VcProj/ownUILib/build/_deps/sfml-subbuild/sfml-populate-prefix/tmp/sfml-populate-gitclone.cmake
 source_dir=D:/VcProj/ownUILib/build/_deps/sfml-src
 work_dir=D:/VcProj/ownUILib/build/_deps
 repository=https://github.com/SFML/SFML.git
@@ -12,4 +12,4 @@ init_submodules=TRUE
 recurse_submodules=--recursive
 submodules=
 CMP0097=NEW
-
+      
