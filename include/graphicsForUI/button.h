@@ -8,7 +8,7 @@ namespace gui
 class Button : public UIElement
 {
 public:
-    sf::Vector2f getSize() { return box.getSize(); };
+    sf::Vector2f getSize() { return UIElement::getSize(); };
     sf::Vector2f getMousePos() { return mouseHandle.getMousePos(); };
     sf::Vector2f getPosition() { return box.getPosition(); };
     MouseHandle getMouseHandle() { return mouseHandle; }

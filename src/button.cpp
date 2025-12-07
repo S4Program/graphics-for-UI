@@ -37,6 +37,7 @@ void gui::Button::setPosition(sf::Vector2f position)
 
 void gui::Button::setSize(sf::Vector2f size)
 {
+    this->size = size;
     box.setSize(size);
     buttonLabel.setSize(size);
 }

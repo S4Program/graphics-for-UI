@@ -18,19 +18,6 @@ set(SFML_USE_STATIC_STD_LIBS TRUE CACHE BOOL "" FORCE)
 
 FetchContent_MakeAvailable(SFML)
 
-add_executable(GraphicsForUI 
-src/mouseHandle.cpp
-src/uiElement.cpp
-src/uiMenu.cpp
-src/defaultMenu.cpp
-src/LabelElement.cpp
-src/button.cpp
-src/slider.cpp
+add_subdirectory(src)
 
-examples/CookieClicker/main.cpp
-)
-target_compile_features(GraphicsForUI PRIVATE cxx_std_17)
-# target_link_options(GraphicsForUI PRIVATE -mwindows)
-target_link_libraries(GraphicsForUI PRIVATE SFML::Graphics)
-
-target_include_directories(GraphicsForUI PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
+add_subdirectory(examples/CookieClicker)

@@ -45,6 +45,7 @@ void gui::UIMenu::recomputeSize()
     sf::Vector2f currentElementPosition = this->padding;
     for(UIElement* elem : elements)
     {
+        printf("y: %f\n", elem->getPadding().y + elem->getSize().y);
         if(elem->getPadding().x != 0)
         {
             currentElementPosition += sf::Vector2f(elem->getPadding().x + elem->getSize().x, 0);
@@ -60,12 +61,13 @@ void gui::UIMenu::recomputeSize()
         }
         else
         {
-            currentElementPosition.x = std::max(currentElementPosition.x, elem->getSize().x);
+            currentElementPosition.y = std::max(currentElementPosition.y, elem->getSize().y);
             minimumSize.y = std::max(minimumSize.y, elem->getSize().y);
         }
-        minimumSize = { std::max(minimumSize.x, currentElementPosition.x + 2*this->padding.x), std::max(minimumSize.y, currentElementPosition.y + 2*this->padding.y) };
+        printf("preMaxY: %f, currentElemPosition: %f\n", minimumSize.y, currentElementPosition.y);
+        minimumSize = { std::max(minimumSize.x, currentElementPosition.x + this->padding.x), std::max(minimumSize.y, currentElementPosition.y + this->padding.y) };
+        printf("postMaxY: %f\n", minimumSize.y);
     }
-    
     this->setMenuBoxSize(minimumSize);
 }
 
@@ -75,28 +77,22 @@ void gui::UIMenu::resetComponents()
 
     sf::Vector2f previousPosition = box.getPosition() + this->padding; // setting up the variable for the first element
 
-    if(elements.at(0)->getPadding().x != 0)
-    {
-        previousPosition -= sf::Vector2f(elements.at(0)->getSize().x, 0);
-    }
-    if(elements.at(0)->getPadding().y != 0)
-    {
-        previousPosition -= sf::Vector2f(0, elements.at(0)->getSize().y);
-    }
-
+    int index = 0;
     for(UIElement* element : elements)
     {
         if(element->getPadding().y != 0)
         {
-            previousPosition += sf::Vector2f(0, element->getSize().y + element->getPadding().y); // moving it lower than the previous element
+            previousPosition += sf::Vector2f(0, element->getPadding().y + (index != 0 ? elements.at(index-1)->getSize().y : 0)); // moving it lower than the previous element
         }
 
         if(element->getPadding().x != 0)
         {
-            previousPosition += sf::Vector2f(element->getPadding().x + element->getSize().x, 0);
+            previousPosition += sf::Vector2f(element->getPadding().x + (index != 0 ? elements.at(index-1)->getSize().x : 0), 0);
         }
 
         element->setPosition(previousPosition);
+
+        index++;
     } 
 }
 

@@ -15,9 +15,9 @@ std::pair<bool, bool> gui::MouseHandle::isClicked()
     bool res1 = isHovered() && isPressed().first && flag1,
          res2 = isHovered() && isPressed().second && flag2;
     
-    if(isHovered() && isPressed().first) flag1 = false;
+    if(isPressed().first) flag1 = false;
     else flag1 = true;
-    if(isHovered() && isPressed().second) flag2 = false;
+    if(isPressed().second) flag2 = false;
     else flag2 = true;
 
     return {res1, res2};
