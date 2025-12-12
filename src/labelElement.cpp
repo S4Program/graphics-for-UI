@@ -27,9 +27,9 @@ void gui::Label::setMessage(std::string message)
 sf::Font gui::Label::loadDefaultFont()
 {
     sf::Font newFont;
-    if(newFont.openFromFile(defaultFontFilePath))
+    if(!newFont.openFromFile(defaultFontFilePath))
     {
-        printf("Couldn't load default font!\n");
+        printf("[labelElement.cpp] Couldn't load default font\n");
     }
     return newFont;
 }

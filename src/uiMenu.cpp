@@ -45,14 +45,14 @@ void gui::UIMenu::recomputeSize()
     sf::Vector2f currentElementPosition = this->padding;
     for(UIElement* elem : elements)
     {
-        printf("y: %f\n", elem->getPadding().y + elem->getSize().y);
+        printf("x: %f\n", elem->getPadding().x + elem->getSize().x);
         if(elem->getPadding().x != 0)
         {
             currentElementPosition += sf::Vector2f(elem->getPadding().x + elem->getSize().x, 0);
         }
         else
         {
-            currentElementPosition.x = std::max(currentElementPosition.x, elem->getSize().x); //<-- NOT CORRECT DUE TO THE NEED TO CHECK IF THIS IS THE LAST ELEMENT
+            currentElementPosition.x = std::max(currentElementPosition.x, elem->getSize().x + this->padding.x);
             minimumSize.x = std::max(minimumSize.x, elem->getSize().x);
         }
         if(elem->getPadding().y != 0)
@@ -61,12 +61,12 @@ void gui::UIMenu::recomputeSize()
         }
         else
         {
-            currentElementPosition.y = std::max(currentElementPosition.y, elem->getSize().y);
+            currentElementPosition.y = std::max(currentElementPosition.y, elem->getSize().y + this->padding.y);
             minimumSize.y = std::max(minimumSize.y, elem->getSize().y);
         }
-        printf("preMaxY: %f, currentElemPosition: %f\n", minimumSize.y, currentElementPosition.y);
+        // printf("preMaxY: %f, currentElemPosition: %f\n", minimumSize.y, currentElementPosition.y);
         minimumSize = { std::max(minimumSize.x, currentElementPosition.x + this->padding.x), std::max(minimumSize.y, currentElementPosition.y + this->padding.y) };
-        printf("postMaxY: %f\n", minimumSize.y);
+        // printf("postMaxY: %f\n", minimumSize.y);
     }
     this->setMenuBoxSize(minimumSize);
 }

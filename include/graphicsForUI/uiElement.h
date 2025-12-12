@@ -1,6 +1,6 @@
 #pragma once
 #include "SFML/Graphics.hpp"
-#include "../../src/elementList.h"
+#include "elementList.h"
 
 namespace gui
 {

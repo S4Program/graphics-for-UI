@@ -8,12 +8,14 @@ enum UIElementList
     BUTTON,
     LABEL,
     CHECKLIST,
+    GRID,
+    GROUP,
     RADIOBUTTON,
     IMAGE,
     SLIDER,
     LIST,
     TEXTBOX,
-    GROUP
+    CANVAS
 };
 }
 #endif

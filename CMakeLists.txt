@@ -20,4 +20,4 @@ FetchContent_MakeAvailable(SFML)
 
 add_subdirectory(src)
 
-add_subdirectory(examples/CookieClicker)
+add_subdirectory(examples)
