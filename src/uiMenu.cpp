@@ -12,7 +12,7 @@ void gui::UIMenu::outlineMouseEvent()
         setPosition(outlineBox.getPosition() + outlineMouseHandle.getMousePos() - previousMousePos);
     }
 
-    if(outlineMouseHandle.isClicked().first || outlineMouseHandle.isPressed().first && isMenuSelected)
+    if(outlineMouseHandle.isClicked(sf::Mouse::Button::Left) || outlineMouseHandle.isPressed(sf::Mouse::Button::Left) && isMenuSelected)
     {
         previousMousePos = outlineMouseHandle.getMousePos();
         isMenuSelected = true;
@@ -27,7 +27,8 @@ void gui::UIMenu::inputEvent()
 {
     for(UIElement* uiElement : elements)
     {
-        if(uiElement->getType() == gui::BUTTON || uiElement->getType() == gui::SLIDER)
+        //--- If current element's type is legible for an update 
+        if(std::find(inputTypes.begin(), inputTypes.end(), uiElement->getType()) != inputTypes.end()) 
         {
             uiElement->update();
         }
@@ -45,7 +46,7 @@ void gui::UIMenu::recomputeSize()
     sf::Vector2f currentElementPosition = this->padding;
     for(UIElement* elem : elements)
     {
-        printf("x: %f\n", elem->getPadding().x + elem->getSize().x);
+        // printf("x: %f\n", elem->getPadding().x + elem->getSize().x);
         if(elem->getPadding().x != 0)
         {
             currentElementPosition += sf::Vector2f(elem->getPadding().x + elem->getSize().x, 0);
@@ -99,7 +100,7 @@ void gui::UIMenu::resetComponents()
 void gui::UIMenu::addElement(UIElement* element)
 {
     elements.push_back(element);
-    setPosition(box.getPosition()); //as the box represents the main frame, it can be used for getting the position...
+    setPosition(outlineBox.getPosition()); //as the box represents the main frame, it can be used for getting the position...
     
     this->recomputeSize();
 }

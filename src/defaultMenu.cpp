@@ -27,7 +27,7 @@ void gui::DefaultMenu::update(sf::View camera)
     UIMenu::outlineMouseEvent();
     UIMenu::inputEvent();    
 
-    if(closeButton.isClicked().first) // If the menu was closed by a button
+    if(closeButton.isClicked(sf::Mouse::Button::Left)) // If the menu was closed by a button
     {
         isVisible = false;
         printf("[defaultMenu.cpp] Closed menu by a button\n");
@@ -47,7 +47,7 @@ void gui::DefaultMenu::setSize(sf::Vector2f size)
 
 void gui::DefaultMenu::setMenuBoxSize(sf::Vector2f size)
 {
-    printf("[defaultMenu.cpp] New menu size: %f, %f\n",size.x, size.y);
+    // printf("[defaultMenu.cpp] New menu size: %f, %f\n",size.x, size.y);
     
     //--- Updating relative menu box position for the top bar
     outlineBox.setSize(sf::Vector2f(size.x, outlineBox.getSize().y));
@@ -71,7 +71,7 @@ void gui::DefaultMenu::setPosition(sf::Vector2f position)
 gui::DefaultMenu::DefaultMenu(std::string title, sf::Vector2f size, sf::Vector2f position, sf::Color boxColor, sf::Color outlineColor, float outlineThickness, sf::RenderWindow* window, sf::Font* font) 
 : 
 UIMenu(size, position, boxColor, outlineColor, outlineThickness, window),
-closeButton(sf::Vector2f(outlineThickness, outlineThickness), sf::Color(255,10,10), sf::Color(120,0,0), sf::Color(0,0,0), window, "X", outlineThickness, font) //<---LEFT HERE
+closeButton(sf::Vector2f(outlineThickness, outlineThickness), sf::Color(255,10,10), sf::Color(0,0,0), window, "X", outlineThickness, font) //<---LEFT HERE
 // So basically I need a folder of default fonts set up, to easily be able to use them. Additionally the people are gonna be so thankful, yaaay
 //title()
 {
@@ -81,7 +81,7 @@ closeButton(sf::Vector2f(outlineThickness, outlineThickness), sf::Color(255,10,1
 gui::DefaultMenu::DefaultMenu(sf::Vector2f size, sf::Vector2f position, sf::Color boxColor, sf::Color outlineColor, float outlineThickness, sf::RenderWindow* window) 
 : 
 UIMenu(size, position, boxColor, outlineColor, outlineThickness, window),
-closeButton(sf::Vector2f(outlineThickness, outlineThickness), sf::Color(255,10,10), sf::Color(120,0,0), window)
+closeButton(sf::Vector2f(outlineThickness, outlineThickness), sf::Color(255,10,10), window)
 {
     closeButton.pack(sf::Vector2f(position.x + size.x - outlineThickness, size.y));
 }

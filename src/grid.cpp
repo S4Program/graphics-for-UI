@@ -16,7 +16,7 @@ void gui::Grid::draw(sf::RenderTarget &window, sf::RenderStates state) const
 
 void gui::Grid::update()
 {
-    this->resetComponents();
+    
 }
 
 void gui::Grid::setSize(sf::Vector2f size)
@@ -28,7 +28,8 @@ void gui::Grid::setSize(sf::Vector2f size)
     {
         for(int x = 0; x < gridResolution.x; x++)
         {
-            this->setElement({(float)x+1,(float)y+1}, this->getElement(x,y));
+            // Changed indexation from x+1, y+1
+            this->setElement({x,y}, this->getElement(x,y));
         }
     }
 }
@@ -46,10 +47,22 @@ void gui::Grid::resetComponents()
     {
         for(int x=0; x<gridResolution.x; x++)
         {
-            Cell& cell = cells[y][x];
-            cell.setPosition(currentPosition);
-            currentPosition.x += this->cellSize.x;
+            Cell* cell = &cells[y][x];
+
+            if(cell->element != NULL)
+            {
+                float prevPositionX = currentPosition.x;
+                currentPosition += (cellSize - cell->element->getSize()) / 2.f;
+                cell->setPosition(currentPosition);
+                currentPosition.x = prevPositionX + cellSize.x;
+                currentPosition.y = y*cellSize.y + origin.y;
+            }
+            else
+            {
+                currentPosition.x += this->cellSize.x;
+            }
         }
+        currentPosition.x = origin.x;
         currentPosition.y += this->cellSize.y;
     }
 }
@@ -71,9 +84,8 @@ void gui::Grid::initGrid()
     }
 }
 
-void gui::Grid::setElement(sf::Vector2f coords, UIElement* element)
+void gui::Grid::setElement(sf::Vector2i coords, UIElement* element)
 {
-    coords += {-1,-1};
     assert(coords.x >= 0 && coords.x < gridResolution.x
         && coords.y >= 0 && coords.y < gridResolution.y 
         && "Index out of bounds");
@@ -82,7 +94,7 @@ void gui::Grid::setElement(sf::Vector2f coords, UIElement* element)
     cells[coords.y][coords.x].element->setSize({std::min(cellSize.x, element->getSize().x), std::min(cellSize.y, element->getSize().y)});
 }
 
-gui::Grid::Grid(sf::Vector2f gridSize, sf::Vector2f gridResolution)
+gui::Grid::Grid(sf::Vector2f gridSize, sf::Vector2i gridResolution)
 :
 UIElement(gridSize),
 gridResolution(gridResolution),
@@ -90,7 +102,7 @@ cellSize({gridSize.x / gridResolution.x, gridSize.y / gridResolution.y})
 {
     this->initGrid();
 }
-gui::Grid::Grid(sf::Vector2f cellSize, sf::Vector2f gridResolution, bool flag)
+gui::Grid::Grid(sf::Vector2f cellSize, sf::Vector2i gridResolution, bool flag)
 :
 UIElement({cellSize.x * gridResolution.x, cellSize.y * gridResolution.y}),
 gridResolution(gridResolution),

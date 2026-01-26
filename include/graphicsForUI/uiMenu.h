@@ -5,6 +5,7 @@
 
 #include <vector>
 #include <cassert>
+#include <algorithm>
 
 namespace gui
 {   
@@ -12,6 +13,8 @@ namespace gui
 class UIMenu : public sf::Drawable
 {
 public:
+    virtual sf::Vector2f getPosition() { return position; };
+
     virtual void toggle(bool arg);
     virtual void outlineMouseEvent();
     virtual void inputEvent();
@@ -34,6 +37,8 @@ protected:
 typedef std::vector<gui::UIElement*> UIElements;
     UIElements elements;
     
+    std::vector<int> inputTypes = {BUTTON, SLIDER, GRID}; // element types that will be processed in update function
+
 //--- Box variables
     sf::RectangleShape box;
     sf::Vector2f size;

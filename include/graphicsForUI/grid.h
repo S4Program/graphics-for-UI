@@ -33,10 +33,10 @@ public:
 
     void clearGrid();
     void initGrid();
-    void setElement(sf::Vector2f coords, UIElement* element);
+    void setElement(sf::Vector2i coords, UIElement* element);
 
-    Grid(sf::Vector2f gridSize, sf::Vector2f gridResolution);
-    Grid(sf::Vector2f cellSize, sf::Vector2f gridResolution, bool flag);
+    Grid(sf::Vector2f gridSize, sf::Vector2i gridResolution);
+    Grid(sf::Vector2f cellSize, sf::Vector2i gridResolution, bool flag);
 
 private:
     //--- Starting Point
@@ -48,7 +48,7 @@ private:
     std::vector<std::vector<Cell>> cells;
 
     /*
-        This is how cells array looks like
+        This is how 'cells' array looks like
         +------->
         |     + X
         |

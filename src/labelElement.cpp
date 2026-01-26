@@ -1,4 +1,6 @@
 #include "graphicsForUI/labelElement.h"
+bool gui::Label::loadedFont = false;
+sf::Font gui::Label::defaultFont = sf::Font();
 
 void gui::Label::draw(sf::RenderTarget &window, sf::RenderStates state) const
 {
@@ -10,13 +12,12 @@ void gui::Label::setPosition(sf::Vector2f position)
 {
     text.setPosition(position);
     backBox.setPosition(text.getGlobalBounds().position);
-    // backBox.setPosition(position);
 }
 
 void gui::Label::setSize(sf::Vector2f size)
 {
     text.setCharacterSize(text.getCharacterSize() / backBox.getSize().x * size.x);
-    backBox.setSize(size);
+    backBox.setSize(text.getGlobalBounds().size + text.getLocalBounds().position);
 }
 
 void gui::Label::setMessage(std::string message)
@@ -26,12 +27,13 @@ void gui::Label::setMessage(std::string message)
 
 sf::Font gui::Label::loadDefaultFont()
 {
-    sf::Font newFont;
-    if(!newFont.openFromFile(defaultFontFilePath))
+    if(loadedFont == false)
     {
-        printf("[labelElement.cpp] Couldn't load default font\n");
+        if(!defaultFont.openFromFile(defaultFontFilePath)) {}
+        loadedFont = true;
     }
-    return newFont;
+    assert(loadedFont != false);
+    return defaultFont;
 }
 
 gui::Label::Label(float characterSize, sf::Color textColor, sf::Color backColor, std::string message, sf::Font* font)

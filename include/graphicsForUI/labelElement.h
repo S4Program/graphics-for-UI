@@ -7,6 +7,8 @@ class Label : public gui::UIElement
 {
 private:
     std::string defaultFontFilePath = "..\\..\\include\\graphicsForUI\\resources\\fonts\\ARIAL.TTF";
+    static sf::Font defaultFont;
+    static bool loadedFont;
     sf::Font loadDefaultFont();
 public:
     sf::Text& getText() { return text; };

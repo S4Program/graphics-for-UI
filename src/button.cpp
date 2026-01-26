@@ -1,9 +1,9 @@
 #include "graphicsForUI/button.h"
 
-std::pair<bool, bool> gui::Button::isClicked()
+bool gui::Button::isClicked(sf::Mouse::Button button)
 {
     isHovered();
-    return mouseHandle.isClicked();
+    return mouseHandle.isClicked(button);
 }
 
 bool gui::Button::isHovered()
@@ -20,9 +20,9 @@ bool gui::Button::isHovered()
     return mouseHandle.isHovered();
 }
 
-std::pair<bool, bool> gui::Button::isPressed()
+bool gui::Button::isPressed(sf::Mouse::Button button)
 {
-    return {mouseHandle.isPressed().first && isHovered(), mouseHandle.isPressed().first && isHovered()};
+    return mouseHandle.isPressed(button);
 }
 
 void gui::Button::onHoverEvent()
@@ -39,7 +39,13 @@ void gui::Button::setSize(sf::Vector2f size)
 {
     this->size = size;
     box.setSize(size);
-    buttonLabel.setSize(size);
+    // buttonLabel.setSize(size);
+    buttonLabel.pack(sf::Vector2f((size.x - buttonLabel.getSize().x) * 0.5f, (size.y - buttonLabel.getSize().y) * 0.5f)); // I literally forgot one bracket...
+}
+
+void gui::Button::setMessage(std::string message)
+{
+    buttonLabel.setMessage(message);
 }
 
 void gui::Button::draw(sf::RenderTarget &window, sf::RenderStates state) const
@@ -50,30 +56,31 @@ void gui::Button::draw(sf::RenderTarget &window, sf::RenderStates state) const
 
 void gui::Button::update()
 {
+    isHovered();
 }
 
-gui::Button::Button(sf::Vector2f size, sf::Color idleColor, sf::Color hoverColor, sf::Color textColor, sf::RenderWindow* window, std::string label, float characterSize, sf::Font* font)
+gui::Button::Button(sf::Vector2f size, sf::Color idleColor, sf::Color textColor, sf::RenderWindow* window, std::string label, float characterSize, sf::Font* font)
 :
 UIElement(size),
 mouseHandle(window, &box),
-hoverColor(hoverColor),
 idleColor(idleColor),
 buttonLabel(characterSize, textColor, label, font)
 {
+    hoverColor = getHoverColor(idleColor);
     buttonLabel.pack(sf::Vector2f((size.x - gui::Label(characterSize, textColor, label, font).getSize().x) * 0.5f, (size.y - gui::Label(characterSize, textColor, label, font).getSize().y) * 0.5f));
     box.setSize(size);
     box.setPosition(padding);
     box.setFillColor(idleColor);
 }
 
-gui::Button::Button(sf::Vector2f size, sf::Color idleColor, sf::Color hoverColor, sf::RenderWindow* window)
+gui::Button::Button(sf::Vector2f size, sf::Color idleColor, sf::RenderWindow* window)
 :
 UIElement(size),
 mouseHandle(window, &box),
-hoverColor(hoverColor),
 idleColor(idleColor),
 buttonLabel()
 {
+    hoverColor = getHoverColor(idleColor);
     box.setSize(size);
     box.setPosition(padding);
     box.setFillColor(idleColor);

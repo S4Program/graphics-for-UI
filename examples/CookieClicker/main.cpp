@@ -21,11 +21,11 @@ int main()
     auto window = sf::RenderWindow(sf::VideoMode(screenResolution), "Clicker");
     window.setFramerateLimit(60);
 
-    gui::Button button(sf::Vector2f(100,30), sf::Color(160,160,160), sf::Color(100,100,100), sf::Color(0,0,0), &window, "click here", 20.f);
+    gui::Button button(sf::Vector2f(100,30), sf::Color(160,160,160), sf::Color(0,0,0), &window, "click here", 20.f);
     button.pack(sf::Vector2f(0,10));
 
     gui::DefaultMenu menu("default menu", {0,0}, sf::Vector2f(300,300), sf::Color(60,60,60), sf::Color(170, 100, 20), 20, &window);
-    menu.setPadding({25,0});
+    menu.setPadding({25,25});
 
     gui::Label l1(20, sf::Color(255,255,255), "Clicker the game");
     gui::Label l2(20, sf::Color(255,255,255), "Clicks: 0");
@@ -48,7 +48,7 @@ int main()
         menu.update(window.getView());
 
         static int counter = 0;
-        if(button.isClicked().first)
+        if(button.isClicked(sf::Mouse::Button::Left))
         {
             l2.setMessage("Clicks: "+std::to_string(++counter));
         }
