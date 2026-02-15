@@ -37,56 +37,37 @@ void gui::TextBox::getEvent(std::optional<sf::Event> event)
 void gui::TextBox::inputLogic(int charTyped)
 {
 
-    if(!(charTyped >= 48 && charTyped <= 57 || charTyped == _DELETE || charTyped == ENTER || charTyped == ESCAPE))
+    if(!(charTyped >= 32 && charTyped <= 127 || charTyped == _DELETE || charTyped == ENTER || charTyped == ESCAPE))
     {
         return;
     }
 
-    if(charTyped != _DELETE && charTyped != ENTER && charTyped != ESCAPE && textValue.size() < 8)
+    if(charTyped != _DELETE && charTyped != ENTER && charTyped != ESCAPE && textValue.size() < characterLimit)
     {
         textValue.push_back(charTyped);
-        if(textValue.size() == 2 || textValue.size() == 5)
-        {
-            textValue.push_back(':');
-        }
     }
     else if(charTyped == _DELETE && textValue.size() > 0)
     {
-        if(textValue.back() == ':')
-        {
-            textValue.pop_back();
-        }
         textValue.pop_back();
     }
     else if(charTyped == ENTER)
     {
-        fill();
         isFocused = false;
         isSet = true;
-
-        setTime = 60*60*10 * (textValue[0]-'0') + 60*60 * (textValue[1]-'0') + 60*10 * (textValue[3]-'0') + 60 * (textValue[4]-'0') + 10 * (textValue[6]-'0') + (textValue[7]-'0');
-        timer.restart();
     }
 
     text.setMessage(textValue);
 }
 
-void gui::TextBox::fill()
-{
-    while(textValue.size() < 8)
-    {
-        inputLogic('0');
-    }
-}
 
-
-gui::TextBox::TextBox(sf::RenderWindow* window, sf::Vector2f size, sf::Color boxColor, sf::Color foreColor, sf::Font* font, float characterSize, std::string defaultMessage, sf::Vector2f position)
+gui::TextBox::TextBox(sf::RenderWindow* window, sf::Vector2f size, sf::Color boxColor, sf::Color foreColor, sf::Font* font, float characterSize, std::string defaultMessage, sf::Vector2f position, uint8_t characterLimit)
 :
 window(window),
 box(size),
 text(characterSize, foreColor, "...", font),
 boxFrame(window, &box),
-defaultMessage(defaultMessage)
+defaultMessage(defaultMessage),
+characterLimit(characterLimit)
 {
     box.setFillColor(boxColor);
 

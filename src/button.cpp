@@ -57,6 +57,7 @@ void gui::Button::draw(sf::RenderTarget &window, sf::RenderStates state) const
 void gui::Button::update()
 {
     isHovered();
+    mouseHandle.nextCycle();
 }
 
 gui::Button::Button(sf::Vector2f size, sf::Color idleColor, sf::Color textColor, sf::RenderWindow* window, std::string label, float characterSize, sf::Font* font)

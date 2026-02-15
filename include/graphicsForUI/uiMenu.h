@@ -37,6 +37,7 @@ protected:
 typedef std::vector<gui::UIElement*> UIElements;
     UIElements elements;
     
+    // NOTE: Do I really need this?
     std::vector<int> inputTypes = {BUTTON, SLIDER, GRID}; // element types that will be processed in update function
 
 //--- Box variables

@@ -5,12 +5,16 @@ void gui::DefaultMenu::draw(sf::RenderTarget &window, sf::RenderStates state) co
     if(!isVisible) return;
 
     window.draw(outlineBox);
+    window.draw(title);
     window.draw(closeButton);
     window.draw(box);
 
     for(const UIElement* element : elements)
     {
-        window.draw(*element);
+        if(element->isVisible())
+        {
+            window.draw(*element);
+        }
     }
 }
 
@@ -33,6 +37,7 @@ void gui::DefaultMenu::update(sf::View camera)
         printf("[defaultMenu.cpp] Closed menu by a button\n");
     }
 
+    
 }
 
 void gui::DefaultMenu::setSize(sf::Vector2f size)
@@ -63,21 +68,24 @@ void gui::DefaultMenu::setPosition(sf::Vector2f position)
 {
     box.setPosition(sf::Vector2f(position.x, position.y + outlineThickness) );
     outlineBox.setPosition(position);
+    title.setPosition(sf::Vector2f((outlineBox.getSize().x - title.getSize().x)*0.5f + position.x, position.y));
     closeButton.setPosition(sf::Vector2f(position.x + size.x - outlineThickness, position.y));
 
     gui::UIMenu::resetComponents();
 }
 
-gui::DefaultMenu::DefaultMenu(std::string title, sf::Vector2f size, sf::Vector2f position, sf::Color boxColor, sf::Color outlineColor, float outlineThickness, sf::RenderWindow* window, sf::Font* font) 
+//--- Menu with title and close button
+gui::DefaultMenu::DefaultMenu(std::string title, sf::Vector2f size, sf::Vector2f position, sf::Color boxColor, sf::Color outlineColor, float characterSize, sf::RenderWindow* window, sf::Font* font) 
 : 
-UIMenu(size, position, boxColor, outlineColor, outlineThickness, window),
-closeButton(sf::Vector2f(outlineThickness, outlineThickness), sf::Color(255,10,10), sf::Color(0,0,0), window, "X", outlineThickness, font) //<---LEFT HERE
-// So basically I need a folder of default fonts set up, to easily be able to use them. Additionally the people are gonna be so thankful, yaaay
-//title()
+UIMenu(size, position, boxColor, outlineColor, Label(characterSize, sf::Color::White, title, font).getSize().y * 1.1f, window),
+closeButton(sf::Vector2f(outlineThickness, outlineThickness), sf::Color(255,10,10), sf::Color(0,0,0), window, "X", outlineThickness, font),
+title(characterSize, sf::Color::White, title, font)
 {
-    closeButton.pack(sf::Vector2f(position.x + size.x - outlineThickness, size.y));
+    closeButton.setPosition(sf::Vector2f(position.x + size.x - outlineThickness, size.y));
+    this->title.setPosition(sf::Vector2f((outlineBox.getSize().x - this->title.getSize().x)*0.5f + UIMenu::position.x, UIMenu::position.y));
 }
 
+//--- Menu with close button
 gui::DefaultMenu::DefaultMenu(sf::Vector2f size, sf::Vector2f position, sf::Color boxColor, sf::Color outlineColor, float outlineThickness, sf::RenderWindow* window) 
 : 
 UIMenu(size, position, boxColor, outlineColor, outlineThickness, window),

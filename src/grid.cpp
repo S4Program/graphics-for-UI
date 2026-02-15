@@ -16,7 +16,15 @@ void gui::Grid::draw(sf::RenderTarget &window, sf::RenderStates state) const
 
 void gui::Grid::update()
 {
-    
+    for(std::vector<Cell>& row : cells)
+    {
+        for(Cell& cell : row)
+        {
+            if(cell.element != NULL){
+                cell.element->update();
+            }
+        }
+    }
 }
 
 void gui::Grid::setSize(sf::Vector2f size)

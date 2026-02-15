@@ -27,19 +27,23 @@ bool gui::MouseHandle::isClicked(sf::Mouse::Button button)
 //------------------------------------------------------------
 // NEW                 
 
-    bool res = isHovered() && isPressed(button) && flags[(int)button];
+    // PROBLEM LIES IN THE FACT THAT FIRST VALUE IN THE CYCLE GETS GRABBED. THIS MAKES IT NEAR IMPOSSIBLE TO REGISTER BUTTON PRESS
 
+    bool res = isHovered() && isPressed(button) && flags[(int)button];
+    values[(int)button] = std::max((bool)values[(int)button],res);
+    // if(values[(int)button]) printf("aaa ");
     if(isPressed(button)) flags[(int)button] = false;
     else flags[(int)button] = true;
 
-    return res;
+    return values[(int)button];
 }
 
 gui::MouseHandle::MouseHandle(sf::RenderWindow* window, sf::RectangleShape* hitbox)
 :
 window(window),
 hitbox(hitbox),
-flags(std::vector<bool>(5,true))
+flags(std::vector<bool>(5,true)),
+values(std::vector<bool>(5, false))
 {
     
 }
@@ -47,7 +51,14 @@ flags(std::vector<bool>(5,true))
 gui::MouseHandle::MouseHandle(sf::RenderWindow* window)
 :
 window(window),
-flags(std::vector<bool>(5,true))
+flags(std::vector<bool>(5,true)),
+values(std::vector<bool>(5, false))
 {
     
+}
+
+void gui::MouseHandle::nextCycle()
+{
+    this->calculatedCycle = false;
+    values = std::vector<bool>(5, false);
 }

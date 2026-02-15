@@ -10,13 +10,16 @@ class UIElement : public sf::Drawable
 public:
     virtual sf::Vector2f getSize() { return size; };
     virtual sf::Vector2f getPadding() { return padding; };
+    virtual sf::Vector2f getPosition() = 0;
+    bool isVisible() const { return visible; };
     virtual int getType() = 0;
 
     virtual void draw(sf::RenderTarget &window, sf::RenderStates state) const = 0;
     virtual void update() = 0;
-
+    
+    virtual void toggle(bool arg);
     virtual void setSize(sf::Vector2f size) = 0;
-    virtual void setPosition(sf::Vector2f position) = 0;
+    virtual void setPosition(sf::Vector2f position) = 0; 
     void setPadding(sf::Vector2f padding);
     virtual void pack(sf::Vector2f padding);
 
@@ -25,6 +28,8 @@ public:
 protected:
     sf::Vector2f padding = {0, 0};
     sf::Vector2f size;
+
+    bool visible = true;
 };
 
 }

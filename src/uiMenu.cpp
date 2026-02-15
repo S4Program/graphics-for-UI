@@ -21,6 +21,8 @@ void gui::UIMenu::outlineMouseEvent()
     {
         isMenuSelected = false;
     }
+
+    outlineMouseHandle.nextCycle();
 }
 
 void gui::UIMenu::inputEvent()
@@ -81,18 +83,27 @@ void gui::UIMenu::resetComponents()
     int index = 0;
     for(UIElement* element : elements)
     {
+        UIElement* prevElement = elements.at(std::max(0,index-1));
+
+        //--- [I guess it is a feature and not a bug]
+        // sf::Vector2f maxPosition = {0,0};
+        
         if(element->getPadding().y != 0)
         {
-            previousPosition += sf::Vector2f(0, element->getPadding().y + (index != 0 ? elements.at(index-1)->getSize().y : 0)); // moving it lower than the previous element
+            previousPosition += sf::Vector2f(0, element->getPadding().y + (index != 0 ? prevElement->getSize().y : 0)); // moving it lower than the previous element
         }
 
         if(element->getPadding().x != 0)
         {
-            previousPosition += sf::Vector2f(element->getPadding().x + (index != 0 ? elements.at(index-1)->getSize().x : 0), 0);
+            previousPosition += sf::Vector2f(element->getPadding().x + (index != 0 ? prevElement->getSize().x : 0), 0);
         }
-
+        
+        
         element->setPosition(previousPosition);
-
+        
+        //--- [I guess it is a feature and not a bug]
+        // previousPosition = maxPosition; // So elements would be in an outer-most position 
+        
         index++;
     } 
 }

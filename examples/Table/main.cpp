@@ -12,7 +12,7 @@ int main()
     auto window = sf::RenderWindow(sf::VideoMode(screenResolution), "Table example");
     window.setFramerateLimit(60);
 
-    gui::DefaultMenu menu("default menu", {0,0}, menuSize, sf::Color(60,60,60), sf::Color(170, 100, 20), 20, &window);
+    gui::DefaultMenu menu("Table example", {0,0}, {0,0}, sf::Color(60,60,60), sf::Color(170, 100, 20), 20, &window);
     gui::Grid grid(menuSize, sf::Vector2i(3,4));
     gui::Button* buttons[10];
     

@@ -15,7 +15,7 @@ public:
     virtual void setMenuBoxSize(sf::Vector2f size);
     virtual void setPosition(sf::Vector2f position);
 
-    DefaultMenu(std::string title, sf::Vector2f size, sf::Vector2f position, sf::Color boxColor, sf::Color outlineColor, float outlineThickness, sf::RenderWindow* window, sf::Font* font = NULL);
+    DefaultMenu(std::string title, sf::Vector2f size, sf::Vector2f position, sf::Color boxColor, sf::Color outlineColor, float characterSize, sf::RenderWindow* window, sf::Font* font = NULL);
     DefaultMenu(sf::Vector2f size, sf::Vector2f position, sf::Color boxColor, sf::Color outlineColor, float outlineThickness, sf::RenderWindow* window);
 protected:
 

@@ -21,3 +21,8 @@ void gui::UIElement::setPadding(sf::Vector2f padding)
 {
     this->padding = padding;
 }
+
+void gui::UIElement::toggle(bool arg)
+{
+    this->visible = arg;
+}

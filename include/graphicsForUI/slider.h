@@ -9,6 +9,7 @@ class Slider : public UIElement
 public:
     virtual int getType() { return SLIDER; };
     float getValue() { return value; };
+    virtual sf::Vector2f getPosition() { return background.getPosition(); };
 
     virtual void draw(sf::RenderTarget &window, sf::RenderStates state) const;
     virtual void update();

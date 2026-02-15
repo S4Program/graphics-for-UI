@@ -131,10 +131,16 @@ int main()
     auto window = sf::RenderWindow(sf::VideoMode(screenResolution), "Minesweeper");
     window.setFramerateLimit(60);
 
-    gui::DefaultMenu menu("default menu", {0,0}, menuSize, sf::Color(60,60,60), sf::Color(170, 100, 20), 20, &window);
+    gui::DefaultMenu menu("Minesweeper", {0,0}, {0,0}, sf::Color(60,60,60), sf::Color(170, 100, 20), 20, &window);
     gui::Grid grid(buttonSize + gap, gridSize, 1);
+    gui::Label endGameText(55, sf::Color(255,20,20), "GAME OVER");
+    gui::Button btn({100,100}, sf::Color::Blue, &window);
     std::vector<std::vector<Tile>> tiles(gridSize.y);
-    
+
+//--- Setting up end-game text
+    endGameText.pack({-(menuSize.x - endGameText.getSize().x) / 2.f - endGameText.getSize().x, -(menuSize.y - endGameText.getSize().y) / 2.f - endGameText.getSize().y});
+    endGameText.toggle(false);
+
 //--- Setting up grid
     for(int i=0; i<gridSize.y; i++)
     {
@@ -147,10 +153,11 @@ int main()
     }
 
     printf("[main.cpp] Menu's position: %f, %f\n", menu.getPosition().x, menu.getPosition().y);
-    menu.setPosition({0,0});
-
+    
+//--- Including elements into a menu
     menu.addElement(&grid);
-
+    menu.addElement(&endGameText);
+    
 //--- Main cycle
     while (window.isOpen())
     {
@@ -167,6 +174,14 @@ int main()
         {
             for(int j=0; j<gridSize.x; j++)
             {
+                if(tiles[i][j].button->isClicked(sf::Mouse::Button::Left) && tiles[i][j].value == -1 && tiles[i][j].state != 2)
+                {
+                    printf("[main.cpp] Game over\n");
+                    endGameText.toggle(true);
+                    endGameText.getBackBox().setFillColor(sf::Color(30,30,30));
+                    break;
+                }
+
                 if(tiles[i][j].button->isClicked(sf::Mouse::Button::Left) && tiles[i][j].state == 0)
                 {
                     //--- Generating map first time with empty space
@@ -203,6 +218,8 @@ int main()
                 }
             }
         }
+
+        // if(btn.isClicked(sf::Mouse::Button::Left)) printf("iii ");
 
         menu.update(window.getView());
 

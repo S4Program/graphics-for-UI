@@ -23,6 +23,7 @@ public:
     virtual int getType() { return gui::GRID; };
     UIElement* getElement(int x, int y) { return cells[y][x].element; };
     UIElement* getConstElement(int x, int y) const { return cells[y][x].element; };
+    virtual sf::Vector2f getPosition() { return origin; };
 
     virtual void draw(sf::RenderTarget &window, sf::RenderStates state) const;
     virtual void update();

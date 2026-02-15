@@ -10,11 +10,13 @@ private:
     static sf::Font defaultFont;
     static bool loadedFont;
     sf::Font loadDefaultFont();
+    
 public:
     sf::Text& getText() { return text; };
     virtual sf::Vector2f getSize() { return backBox.getSize(); };
     virtual sf::Vector2f getPosition() { return backBox.getPosition(); };
     virtual int getType() { return gui::LABEL; };
+    sf::RectangleShape& getBackBox() { return backBox; };
 
     virtual void draw(sf::RenderTarget &window, sf::RenderStates state) const;
     virtual void update() {};
